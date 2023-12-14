@@ -1,8 +1,16 @@
 import React, { useState } from "react";
 import { BiSend } from "react-icons/bi";
+import { LuTimerReset } from "react-icons/lu";
 import ChatSuggest from "./ChatSuggest";
 
-const ChatInput = ({ setChatData }) => {
+const ChatInput = ({
+  setChatData,
+  resetHandler,
+  suggestions,
+  setSuggestions,
+  flag,
+  setFlag,
+}) => {
   const [input, setInput] = useState("");
 
   const handleClick = (e) => {
@@ -12,15 +20,25 @@ const ChatInput = ({ setChatData }) => {
   return (
     <>
       <div className="chat_input_box">
-        <ChatSuggest setChatData={setChatData} />
+        <ChatSuggest
+          setChatData={setChatData}
+          suggestions={suggestions}
+          setSuggestions={setSuggestions}
+          flag={flag}
+          setFlag={setFlag}
+          resetHandler={resetHandler}
+        />
         <div className="chat_input">
+          <button className="reset" onClick={resetHandler}>
+            <LuTimerReset />
+          </button>
           <input
             type="text"
             autoFocus={true}
             value={input}
             onChange={(e) => setInput(e.target.value)}
           />
-          <button onClick={handleClick}>
+          <button onClick={handleClick} className="send">
             <BiSend />
           </button>
         </div>

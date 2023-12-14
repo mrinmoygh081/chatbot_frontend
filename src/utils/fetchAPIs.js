@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const callAPI = async (method, slug, payload, token) => {
   let path = `${process.env.REACT_APP_BACKEND_API}/${slug}`;
-  console.log(path);
+  // console.log(path);
 
   let config = {
     method: method,

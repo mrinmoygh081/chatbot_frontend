@@ -1,8 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef } from "react";
 
 const ChatList = ({ chatListing }) => {
+  const containerRef = useRef(null);
+
+  const scrollToBottom = () => {
+    containerRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [chatListing]);
+
   return (
-    <div>
+    <div className="chatList">
       <div className="chatlist_container res">
         <div className="chats">
           <div className="chat_single">
@@ -38,6 +48,8 @@ const ChatList = ({ chatListing }) => {
             </>
           );
         })}
+
+      <div ref={containerRef}></div>
     </div>
   );
 };

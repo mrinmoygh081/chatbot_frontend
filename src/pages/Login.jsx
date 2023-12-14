@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { loginHandler } from "../redux/slices/loginSlice";
+import { callAPI } from "../utils/fetchAPIs";
 // import { callAPI } from "../utils/fetchAPIs";
 
 export default function Login() {
@@ -21,8 +22,17 @@ export default function Login() {
         toast.error("Please provide a valid email to login");
         return;
       }
-      setIsOTPActive(true);
-      // trigger OTP mail here
+
+      let payload = {
+        email: loginData.email,
+      };
+      const res = await callAPI("POST", "auth/login", payload, null);
+      if (res.status) {
+        toast.success(res?.message);
+        setIsOTPActive(true);
+      } else {
+        toast.error(res?.message);
+      }
     } else {
       if (!loginData.email) {
         toast.error("Please provide a valid email to login");
@@ -33,9 +43,21 @@ export default function Login() {
         return;
       }
       setIsLoading(true);
-      dispatch(loginHandler({ email: loginData.email }));
+      let payload = {
+        email: loginData.email,
+        enteredOTP: loginData.otp,
+      };
 
-      toast.success("Successfully logged in");
+      const res = await callAPI("POST", "auth/verifyOTP", payload, null);
+      console.log(res);
+      if (res.status) {
+        toast.success(res?.message);
+        toast.success("Successfully logged in");
+        dispatch(loginHandler({ data: res?.data, token: res?.token }));
+      } else {
+        toast.error(res?.message);
+      }
+
       // let res = await callAPI("POST", "auth2/login", loginData, null);
       // if (res?.status) {
       //   dispatch(loginHandler(res));
